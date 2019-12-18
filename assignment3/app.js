@@ -40,11 +40,12 @@ function NarrowItDownController(MenuSearchService) {
         return;
     }
     var promise = MenuSearchService.getMatchedMenuItems(ctrl.searchTerm);
-    promise.then(function(response) {
-      ctrl.found = response.data;
-    }).catch(function(error){
-      console.log(error);
-    });
+    // promise.then(function(response) {
+    //   ctrl.found = response.data;
+    // }).catch(function(error){
+    //   console.log(error);
+    // });
+    ctrl.found = promise;
   };
 
   ctrl.removeItem = function (itemIndex) {
