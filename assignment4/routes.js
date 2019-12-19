@@ -23,24 +23,21 @@ function RouteConfig ($stateProvider,$urlRouterProvider) {
       controller: 'CategoriesController',
       controllerAs: 'categoriesCtrl',
       resolve: {
-       menuCategories: function () {
-          console.log("resolve getAllCategories");
-          return null;
-        }
-       // ['MenuDataService', function (MenuDataService) {
-       //   console.log("resolve getAllCategories");
-       //    return MenuDataService.getAllCategories();
-       //  }]
+       menuCategories: ['MenuDataService', function (MenuDataService) {
+         console.log("resolve getAllCategories");
+          return MenuDataService.getAllCategories();
+        }]
       }
     })
-    .state('categories.items', {
-      //url: '/categories/{category}',
+    .state('items', {
+      url: '/items/{itemId}',
       templateUrl: 'items.html',
       controller: 'ItemsController',
       controllerAs: 'itemsCtrl',
       resolve: {
         menuItems: ['$stateParams','MenuDataService', function ($stateParams, MenuDataService) {
-          return MenuDataService.getItemsForCategory($stateParams.category);
+
+          return MenuDataService.getItemsForCategory($stateParams.itemId);
         }]
       },
       params: {

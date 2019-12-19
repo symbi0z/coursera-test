@@ -2,7 +2,7 @@
 'use strict';
 
 angular.module('data')
-.service('MenuDataService ', MenuDataService );
+.service('MenuDataService', MenuDataService );
 
 MenuDataService .$inject = ['$http','ApiBasePath'];
 function MenuDataService ($http,ApiBasePath) {
@@ -23,11 +23,11 @@ function MenuDataService ($http,ApiBasePath) {
   };
 
   service.getItemsForCategory  = function (categoryShortName) {
-    console.log("MenuDataService getItemsForCategory"+categoryShortName);
+    console.log("MenuDataService getItemsForCategory "+categoryShortName);
     var promise = $http({
       method: "GET",
       url: (ApiBasePath + "/menu_items.json"),
-      param : {
+      params : {
         category : categoryShortName
       }
     });

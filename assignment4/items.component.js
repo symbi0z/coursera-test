@@ -5,7 +5,7 @@ angular.module('data')
 .component('items', {
   templateUrl: 'items.template.html',
   bindings: {
-    categories: '<'
+    items: '<'
   }
 });
 
