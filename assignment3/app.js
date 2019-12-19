@@ -3,19 +3,20 @@
 
 angular.module('NarrowItDownApp', [])
 .controller('NarrowItDownController', NarrowItDownController)
+.controller('FoundItemsDirectiveController', FoundItemsDirectiveController)
 .service('MenuSearchService', MenuSearchService)
-.directive('foundItems', FoundItems)
+.directive('foundItems', FoundItemstDirective)
 .constant('ApiBasePath', "https://davids-restaurant.herokuapp.com");
 
-function FoundItems() {
+function FoundItemstDirective() {
   var ddo = {
     templateUrl: 'foundItems.html',
+    restrict:'E',
     scope: {
       foundItems :"<",
-      onRemove: '&'
+      onRemove: '&',
     },
-    controller: FoundItemsDirectiveController,
-    controllerAs: 'list',
+    controller: 'FoundItemsDirectiveController as list',
     bindToController: true
   };
 
@@ -25,16 +26,20 @@ function FoundItems() {
 
 function FoundItemsDirectiveController() {
   var list = this;
+  list.remove = function(myIndex) {
+    console.log("remove"+myIndex);
+    list.onRemove({index : myIndex});
+  };
 }
 
 NarrowItDownController.$inject = ['MenuSearchService'];
 function NarrowItDownController(MenuSearchService) {
   var ctrl = this;
 
-  ctrl.found = [];
   ctrl.searchTerm = "";
 
   ctrl.narrowItDown = function () {
+    console.log("narrowItDown");
     if(ctrl.searchTerm == "") {
         ctrl.found = [];
         return;
@@ -46,16 +51,20 @@ function NarrowItDownController(MenuSearchService) {
     //   console.log(error);
     // });
     ctrl.found = promise;
+    ctrl.foundName = ctrl.found[0].name;
+    console.log("found :"+ ctrl.found);
+    console.log("foundName :"+ ctrl.foundName);
   };
 
   ctrl.removeItem = function (itemIndex) {
-    found.splice(itemIndex, 1);
+    console.log("onremove"+itemIndex);
+    ctrl.found.splice(itemIndex, 1);
   };
 }
 
 
-MenuSearchService.$inject = ['$q'];
-function MenuSearchService($q) {
+MenuSearchService.$inject = ['$http'];
+function MenuSearchService($http) {
   var service = this;
 
   service.getMatchedMenuItems = function (searchTerm) {
@@ -76,7 +85,9 @@ function MenuSearchService($q) {
 
       for (var i = 0; i < data.length; i++) {
         if(data[i] != null && data[i].description != null && data[i].description.indexOf(searchTerm) !== -1) {
-          foundItems.push(data[i]);
+          var item ={};
+          item.name = data[i].name;
+          foundItems.push(item);
         }
       }
 
